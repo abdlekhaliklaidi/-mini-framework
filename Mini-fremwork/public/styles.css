@@ -218,8 +218,8 @@ footer .filters button:hover {
 
 
 .todo-list input[type="checkbox"]:checked {
-  background-color: #5b9bd5;
-  border-color: #5b9bd5;
+  background-color: #09988dff;
+  border-color: #09988dff;
 }
 
 .todo-list input[type="checkbox"]:checked::after {

@@ -333,12 +333,14 @@ import { FooterInfo } from './FooterInfo.js';
         }),
       ]),
     ]),
+    ...(todos.length > 0 ? [
       createElement('section', { class: 'main' }, [
         TodoListComponent(),
         FooterComponent()
       ])
-    ]);
-  }  
+    ] : [])
+  ]);
+}
 
   function renderApp() {
     const newAppNode = AppComponent();
