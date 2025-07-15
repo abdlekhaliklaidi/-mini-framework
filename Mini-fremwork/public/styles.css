@@ -10,7 +10,7 @@ body {
   padding: 20px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   height: 100vh;
 }
 
@@ -52,9 +52,11 @@ body {
 }
 
 h1 {
-  font-size: 24px;
+  /* font-size: 24px; */
   /* color: #333; */
   color: #b83f45;
+  font-size: 80px;
+  font-weight: 200;
 }
 
 .todo-app input[type="text"] {
@@ -89,7 +91,8 @@ input[type="text"]:focus,
 .todo-list input.edit:focus {
   border: 1px solid #b83f45;
   outline: none;
-  box-shadow: 0 0 5px red;
+  /* box-shadow: 0 0 5px red; */
+  box-shadow: inset 0 -2px 1px rgba(0, 0, 0, .03);
 }
 
 /* input[type="text"]:focus {
@@ -121,7 +124,7 @@ input[type="checkbox"] {
 
 label {
   flex-grow: 1;
-  font-size: 18px;
+  font-size: 25px;
 }
 
 button.destroy {
@@ -134,13 +137,16 @@ button.destroy {
 }
 
 button.destroy:hover {
-  color: #c0392b;
+ border-color: #ce4646;
 }
 
 footer {
   padding: 15px;
   text-align: center;
   border-top: 1px solid #eaeaea;
+  margin-top: 20px;
+  font-size: 13px;
+  color: #999;
 }
 
 footer span {
@@ -161,10 +167,17 @@ footer button {
 }
 
 footer button:hover {
-  background-color: #7e4245;
+  /* background-color: #7e4245; */
+  border: 1px solid #b83f45;
+  border-radius: 4px;
 }
 
-.completed {
+/* .completed {
+  text-decoration: line-through;
+  color: #888;
+} */
+
+.todo-list li.completed label {
   text-decoration: line-through;
   color: #888;
 }
@@ -199,14 +212,16 @@ footer .filters button {
 
 footer .filters button:hover {
   background-color: #f5f5f5;
+  border: 1px solid #b83f45;
+  border-radius: 4px;
 }
 
 .todo-list input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 30px;
+  height: 30px;
   border: 2px solid #ccc;
   border-radius: 50%;
   cursor: pointer;
@@ -218,7 +233,7 @@ footer .filters button:hover {
 
 
 .todo-list input[type="checkbox"]:checked {
-  background-color: #09988dff;
+  /* background-color: #09988dff; */
   border-color: #09988dff;
 }
 
@@ -228,8 +243,8 @@ footer .filters button:hover {
   top: 4px;
   left: 7px;
   width: 4px;
-  height: 8px;
-  border: solid white;
+  height: 14px;
+  border: solid #09988dff;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
@@ -278,4 +293,22 @@ footer .filters button:hover {
   border-color: rgb(24, 24, 24);
   /* transform: rotate(135deg); */
 }
+
+.todo-list li button.destroy {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.todo-list li:hover button.destroy {
+  opacity: 1;
+}
+
+.todo-list li button.destroy {
+  visibility: hidden;
+}
+
+.todo-list li:hover button.destroy {
+  visibility: visible;
+}
+
 

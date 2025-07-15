@@ -183,11 +183,14 @@ import { FooterInfo } from './FooterInfo.js';
   }
 
   function toggleComplete(id) {
-       const todos = state.getState().todos.map(t =>
-         t.id === id ? { ...t, completed: !t.completed } : t
-       );
-       state.setState({ todos });
-     }
+  const todos = state.getState().todos.map(todo => {
+    if (todo.id === id) {
+      return { ...todo, completed: !todo.completed };
+    }
+    return todo;
+  });
+  state.setState({ todos });
+}
 
   function removeTodo(id) {
          const todos = state.getState().todos.filter(t => t.id !== id);
@@ -200,17 +203,39 @@ import { FooterInfo } from './FooterInfo.js';
   }
 
   function updateTodoText(id, newText) {
-       const todos = state.getState().todos.map(t =>
-         t.id === id ? { ...t, text: newText.trim() } : t
-       );
-       state.setState({ todos, editingId: null });
-     }
+  const todos = state.getState().todos.map(todo =>
+    todo.id === id ? { ...todo, text: newText.trim() } : todo
+  );
+  state.setState({ todos, editingId: null });
+}
 
-  const toggleAll = (checked) => {
-  const todos = state.getState().todos.map(t => ({ ...t, completed: checked }));
-  state.setState({ todos });
+ const toggleAll = (checked) => {
+  const { todos, filter } = state.getState();
+
+  let updatedTodos;
+
+  if (filter === 'all') {
+    updatedTodos = todos.map(t => ({ ...t, completed: checked }));
+
+  } else if (filter === 'active') {
+    if (checked) {
+      updatedTodos = todos.map(t => t.completed ? t : { ...t, completed: true });
+    } else {
+      return;
+    }
+
+  } else if (filter === 'completed') {
+    if (!checked) {
+      updatedTodos = todos.map(t => t.completed ? { ...t, completed: false } : t);
+    } else {
+      return;
+    }
+  }
+
+  if (updatedTodos) {
+    state.setState({ todos: updatedTodos });
+  }
 };
-
 
   function TodoListComponent() {
     const { todos, filter, editingId } = state.getState();
@@ -307,13 +332,16 @@ import { FooterInfo } from './FooterInfo.js';
       createElement('header', { class: 'header' }, [
         createElement('h1', {}, ['todos']),
         createElement('div', { class: 'input-wrapper' }, [
+        ...(todos.length > 0 ? [
         createElement('input', {
-          type: 'checkbox',
-          class: 'toggle-all',
-          id: 'toggle-all',
-          checked: allCompleted,
-          onchange: (e) => toggleAll(e.target.checked)
-        }),
+        type: 'checkbox',
+        class: 'toggle-all',
+        id: 'toggle-all',
+        checked: allCompleted,
+        onchange: (e) => toggleAll(e.target.checked)
+      })
+   ] : []),
+
         createElement('input', {
           class: 'new-todo',
           id: 'new-todo',
@@ -367,6 +395,6 @@ import { FooterInfo } from './FooterInfo.js';
 
   // Initial render
   router.navigate(window.location.pathname);
-  render(FooterInfo(), document.body);
+  // render(FooterInfo(), document.body);
   router.initRoute();
 })();
