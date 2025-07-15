@@ -24,10 +24,22 @@ const server = http.createServer((req, res) => {
   const contentType = mimeTypes[extname] || 'application/octet-stream';
 
   fs.readFile(filePath, (err, content) => {
-    if (err) {
-      if (err.code == 'ENOENT') {
-        res.writeHead(404, { 'Content-Type': 'text/html' });
-        res.end('<h1>404 - Not Found</h1>', 'utf-8');
+   if (err) {
+      if (err.code === 'ENOENT') {
+        if (!path.extname(filePath)) {
+          fs.readFile('./index.html', (err, content) => {
+            if (err) {
+              res.writeHead(500);
+              res.end(`Erreur du serveur: ${err.code}`);
+            } else {
+              res.writeHead(200, { 'Content-Type': 'text/html' });
+              res.end(content, 'utf-8');
+            }
+          });
+        } else {
+          res.writeHead(404, { 'Content-Type': 'text/html' });
+          res.end('<h1>404 - Not Found</h1>', 'utf-8');
+        }
       } else {
         res.writeHead(500);
         res.end(`Erreur du serveur: ${err.code}`);

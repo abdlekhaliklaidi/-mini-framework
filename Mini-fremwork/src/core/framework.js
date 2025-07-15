@@ -276,8 +276,8 @@ function createRouter() {
   }
 
   function navigate(path) {
-    if (window.location.pathname !== path) {
-      history.pushState({}, '', path);
+   if (window.location.hash.slice(1) !== path) {
+      window.location.hash = path;
     }
     if (routes[path]) {
       routes[path]();
@@ -285,18 +285,18 @@ function createRouter() {
   }
 
   function initRoute() {
-    const path = window.location.pathname;
+    const path = window.location.hash.slice(1) || '/';
     if (routes[path]) {
       routes[path]();
     }
 
-    window.onpopstate = function () {
-      const currentPath = window.location.pathname;
-      if (routes[currentPath]) {
-        routes[currentPath]();
-      }
-    };
-  }
+    window.onhashchange = function () {
+    const currentPath = window.location.hash.slice(1) || '/';
+    if (routes[currentPath]) {
+      routes[currentPath]();
+    }
+  };
+}
 
   return { addRoute, navigate, initRoute };
 }

@@ -3,6 +3,15 @@ import { FooterInfo } from './FooterInfo.js';
 
 (function initApp() {
 
+  if (!window.location.hash) {
+  const path = window.location.pathname;
+  const allowedPaths = ['/active', '/completed', '/'];
+
+  if (allowedPaths.includes(path)) {
+    window.location.replace(`/#${path}`);
+  }
+}
+
   const appRoot = document.createElement('div');
   appRoot.id = 'app';
   document.body.appendChild(appRoot);
@@ -293,7 +302,7 @@ import { FooterInfo } from './FooterInfo.js';
   });
 
   // Initial render
-  router.navigate(window.location.pathname);
+  router.navigate(window.location.hash.slice(1) || '/');
   render(FooterInfo(), document.body);
   router.initRoute();
 })();
