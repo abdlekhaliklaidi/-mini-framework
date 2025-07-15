@@ -240,87 +240,149 @@ import { FooterInfo } from './FooterInfo.js';
   function TodoListComponent() {
     const { todos, filter, editingId } = state.getState();
     const filtered = todos.filter(todo => {
-      if (filter === 'active') return !todo.completed;
-      if (filter === 'completed') return todo.completed;
-      return true;
+    if (filter === 'active') return !todo.completed;
+    if (filter === 'completed') return todo.completed;
+        return true;
     });
 
     if (filtered.length === 0) {
       return createElement('ul', { class: 'todo-list' }, [
-        createElement('li', { key: 'empty' }, ['No todos to display'])
+        createElement('li', { key: 'empty' }, [])
       ]);
     }    
-
     return createElement('ul', { class: 'todo-list' },
         filtered.map(todo => TodoItemComponent({ todo, isEditing: editingId === todo.id }))
       );
   }
 
   function TodoItemComponent({ todo, isEditing }) {
-    return createElement('li', {
-      key: todo.id ?? eventsKey(),
-      class: todo.completed ? 'completed' : ''
-    }, [
+  return createElement('li', {
+    key: todo.id,
+    class: `${todo.completed ? 'completed' : ''} ${isEditing ? 'editing' : ''}`
+  }, [
+    createElement('div', { class: 'view', key: 'view' }, [
       createElement('input', {
+        class: 'toggle',
         type: 'checkbox',
         checked: todo.completed,
         onchange: () => toggleComplete(todo.id)
       }),
-      isEditing
-        ? createElement('input', {
-            type: 'text',
-            class: 'edit',
-            value: todo.text,
-            autofocus: true,
-            onblur: (e) => updateTodoText(todo.id, e.target.value),
-            onkeyup: (e) => {
-              if (e.key === 'Enter') {
-                updateTodoText(todo.id, e.target.value);
-              } else if (e.key === 'Escape') {
-                state.setState({ editingId: null });
-              }
-            }
-          })
-        : createElement('label', {
-            ondblclick: () => state.setState({ editingId: todo.id })
-          }, [todo.text]),
+      createElement('label', {
+        ondblclick: () => state.setState({ editingId: todo.id })
+      }, [todo.text]),
       createElement('button', {
         class: 'destroy',
         onclick: () => removeTodo(todo.id)
-      }, ['✕']) 
-    ]);
-  }  
+      })
+    ]),
+    createElement('input', {
+      key: 'edit',
+      type: 'text',
+      class: 'edit',
+      value: todo.text,
+      autofocus: isEditing,
+      onblur: (e) => updateTodoText(todo.id, e.target.value),
+      onkeyup: (e) => {
+        if (e.key === 'Enter') {
+          updateTodoText(todo.id, e.target.value);
+        } else if (e.key === 'Escape') {
+          state.setState({ editingId: null });
+        }
+      }
+    })
+  ]);
+}
+
+// function TodoItemComponent({ todo, isEditing }) {
+//   return createElement('li', {
+//     key: todo.id,
+//     class: `${todo.completed ? 'completed' : ''} ${isEditing ? 'editing' : ''}`
+//   }, [
+//    createElement('div', { class: 'view', key: 'view' }, [
+//       createElement('input', {
+//         class: 'toggle',
+//         type: 'checkbox',
+//         checked: todo.completed,
+//         onchange: () => toggleComplete(todo.id)
+//       }),
+//       createElement('label', {
+//         ondblclick: () => state.setState({ editingId: todo.id })
+//       }, [todo.text]),
+//       createElement('button', {
+//         class: 'destroy',
+//         onclick: () => removeTodo(todo.id)
+//       }, [])
+//     ]),
+//     isEditing
+//       ? createElement('input', {
+//           key: 'edit',
+//           type: 'text',
+//           class: 'edit',
+//           value: todo.text,
+//           autofocus: true,
+//           onblur: (e) => updateTodoText(todo.id, e.target.value),
+//           onkeyup: (e) => {
+//             if (e.key === 'Enter') {
+//               updateTodoText(todo.id, e.target.value);
+//             } else if (e.key === 'Escape') {
+//               state.setState({ editingId: null });
+//             }
+//           }
+//         })
+//       : null
+//   ]);
+// }
 
   function FooterComponent() {
-    const { todos, filter } = state.getState();
-    const remaining = todos.filter(t => !t.completed).length;
-    const showClear = todos.some(t => t.completed);
+  const { todos, filter } = state.getState();
+  const remaining = todos.filter(t => !t.completed).length;
+  const showClear = todos.some(t => t.completed);
 
-    return createElement('footer', { class: 'footer' }, [
-      createElement('span', {}, [`${remaining} item${remaining !== 1 ? 's' : ''} left`]),
+  return createElement('footer', { class: 'footer' }, [
+    createElement('span', { class: 'todo-count' }, [
+      createElement('strong', {}, [remaining.toString()]),
+      ` item${remaining !== 1 ? 's' : ''} left`
+    ]),
 
-      createElement('button', {
-        onclick: () => router.navigate('/'),
-        class: filter === 'all' ? 'selected' : ''
-      }, ['All']),
-      createElement('button', {
-        onclick: () => router.navigate('/active'),
-        class: filter === 'active' ? 'selected' : ''
-      }, ['Active']),
+    createElement('ul', { class: 'filters' }, [
+      createElement('li', {}, [
+        createElement('a', {
+          href: '#/',
+          class: filter === 'all' ? 'selected' : '',
+          onclick: (e) => {
+            e.preventDefault();
+            router.navigate('/');
+          }
+        }, ['All'])
+      ]),
+      createElement('li', {}, [
+        createElement('a', {
+          href: '#/active',
+          class: filter === 'active' ? 'selected' : '',
+          onclick: (e) => {
+            e.preventDefault();
+            router.navigate('/active');
+          }
+        }, ['Active'])
+      ]),
+      createElement('li', {}, [
+        createElement('a', {
+          href: '#/completed',
+          class: filter === 'completed' ? 'selected' : '',
+          onclick: (e) => {
+            e.preventDefault();
+            router.navigate('/completed');
+          }
+        }, ['Completed'])
+      ])
+    ]),
 
-      // createElement('button', {
-      // onclick: () => eventManager.trigger('filter:change', 'active'),
-      // class: filter === 'active' ? 'selected' : ''
-      // }, ['Active']),
-
-      createElement('button', {
-        onclick: () => router.navigate('/completed'),
-        class: filter === 'completed' ? 'selected' : ''
-      }, ['Completed']),
-
-      showClear ? createElement('button', {
-        onclick: clearCompleted
-      }, ['Clear Completed']) : null,
+    showClear
+      ? createElement('button', {
+          class: 'clear-completed',
+          onclick: clearCompleted
+        }, ['Clear completed'])
+      : null,
     ].filter(Boolean));
   }
 
@@ -328,19 +390,22 @@ import { FooterInfo } from './FooterInfo.js';
     const todos = state.getState().todos;
     const allCompleted = todos.length > 0 && todos.every(todo => todo.completed);
   
-    return createElement('div', { class: 'todo-app' }, [
+    return createElement('div', { class: 'todoapp' }, [
       createElement('header', { class: 'header' }, [
         createElement('h1', {}, ['todos']),
         createElement('div', { class: 'input-wrapper' }, [
-        ...(todos.length > 0 ? [
+         ...(todos.length > 0 ? [
         createElement('input', {
         type: 'checkbox',
         class: 'toggle-all',
         id: 'toggle-all',
         checked: allCompleted,
         onchange: (e) => toggleAll(e.target.checked)
-      })
-   ] : []),
+      }),
+      createElement('label', {
+      htmlFor: 'toggle-all'
+      }, []),
+      ] : []),
 
         createElement('input', {
           class: 'new-todo',
@@ -395,6 +460,6 @@ import { FooterInfo } from './FooterInfo.js';
 
   // Initial render
   router.navigate(window.location.pathname);
-  // render(FooterInfo(), document.body);
+  render(FooterInfo(), document.body);
   router.initRoute();
 })();

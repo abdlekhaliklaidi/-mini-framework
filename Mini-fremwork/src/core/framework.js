@@ -108,12 +108,12 @@ function updateChildren(parentEl, newVChildren = [], oldDomChildren = []) {
     if (k != null) keyedOld[k] = domChild;
   });
 
+  let newDomChildren = [];
+
   newVChildren.forEach((newVChild, idx) => {
-    if (newVChild == null) { 
-      const oldDomChild = oldDomChildren[idx];
-      if (oldDomChild) parentEl.removeChild(oldDomChild);
-      return;
-    }
+    if (newVChild == null) return;
+
+    let newDom;
 
     if (typeof newVChild === 'string') {
       const oldDomChild = oldDomChildren[idx];
@@ -121,32 +121,37 @@ function updateChildren(parentEl, newVChildren = [], oldDomChildren = []) {
         if (oldDomChild.textContent !== newVChild) {
           oldDomChild.textContent = newVChild;
         }
+        newDom = oldDomChild;
       } else {
-        const textNode = document.createTextNode(newVChild);
-        if (oldDomChild) {
-          parentEl.replaceChild(textNode, oldDomChild);
-        } else {
-          parentEl.appendChild(textNode);
-        }
+        newDom = document.createTextNode(newVChild);
       }
-      return;
+    } else {
+      const key = newVChild.attrs?.key;
+      const oldDomChild = key != null ? keyedOld[key] : oldDomChildren[idx];
+      newDom = render(newVChild, parentEl, oldDomChild);
+      if (key != null) delete keyedOld[key];
     }
 
-    const key = newVChild.attrs?.key;
-    const oldDomChild = key != null ? keyedOld[key] : oldDomChildren[idx];
-
-    render(newVChild, parentEl, oldDomChild);
-
-    if (key != null) delete keyedOld[key];
+    newDomChildren.push(newDom);
   });
 
-  Object.values(keyedOld).forEach(orphan => parentEl.removeChild(orphan));
+  newDomChildren.forEach((domChild, i) => {
+    const current = parentEl.childNodes[i];
+    if (domChild && domChild !== current) {
+      parentEl.insertBefore(domChild, current || null);
+    }
+  });
 
-  while (parentEl.childNodes.length > newVChildren.length) {
+  while (parentEl.childNodes.length > newDomChildren.length) {
     parentEl.removeChild(parentEl.lastChild);
   }
-}
 
+  Object.values(keyedOld).forEach(orphan => {
+    if (orphan.parentNode === parentEl) {
+      parentEl.removeChild(orphan);
+    }
+  });
+}
 
 // function updateChildren(parentEl, newVChildren, oldDomChildren) {
 //   const newLength = newVChildren.length;

@@ -1,314 +1,441 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@charset 'utf-8';
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+
+button {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	font-size: 100%;
+	vertical-align: baseline;
+	font-family: inherit;
+	font-weight: inherit;
+	color: inherit;
+	-webkit-appearance: none;
+	appearance: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  /* align-items: center; */
-  height: 100vh;
+	font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	line-height: 1.4em;
+	background: #f5f5f5;
+	color: #111111;
+	min-width: 230px;
+	max-width: 550px;
+	margin: 0 auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-weight: 300;
 }
 
-/* .todo-app {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-} */
-
-.todo-app {
-  position: relative; 
-  background: #fff;
-  margin-top: 130px; 
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  border-radius: 8px;
+.hidden {
+	display: none;
 }
 
-.todo-app h1 {
-  position: absolute;
-  top: -100px;      
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 80px;
-  font-weight: 200;
-  color: #b83f45;
-  margin: 0;
+.todoapp {
+	background: #fff;
+	margin: 130px 0 40px 0;
+	position: relative;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+	            0 25px 50px 0 rgba(0, 0, 0, 0.1);
 }
 
+.todoapp input::-webkit-input-placeholder {
+	font-style: italic;
+	font-weight: 400;
+	color: rgba(0, 0, 0, 0.4);
+}
 
-/* header {
-  padding: 20px;
-  text-align: center;
-  border-bottom: 1px solid #eaeaea;
-  position: relative;
-} */
+.todoapp input::-moz-placeholder {
+	font-style: italic;
+	font-weight: 400;
+	color: rgba(0, 0, 0, 0.4);
+}
+
+.todoapp input::input-placeholder {
+	font-style: italic;
+	font-weight: 400;
+	color: rgba(0, 0, 0, 0.4);
+}
+
+.todoapp h1 {
+	position: absolute;
+	top: -140px;
+	width: 100%;
+	font-size: 80px;
+	font-weight: 200;
+	text-align: center;
+	color: #b83f45;
+	-webkit-text-rendering: optimizeLegibility;
+	-moz-text-rendering: optimizeLegibility;
+	text-rendering: optimizeLegibility;
+}
+
+.new-todo,
+.edit {
+	position: relative;
+	margin: 0;
+	width: 100%;
+	font-size: 24px;
+	font-family: inherit;
+	font-weight: inherit;
+	line-height: 1.4em;
+	color: inherit;
+	padding: 6px;
+	border: 1px solid #999;
+	box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+	box-sizing: border-box;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.new-todo {
+	padding: 16px 16px 16px 60px;
+	height: 65px;
+	border: none;
+	background: rgba(0, 0, 0, 0.003);
+	box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
+}
+
+.main {
+	position: relative;
+	z-index: 2;
+	border-top: 1px solid #e6e6e6;
+}
+
+.toggle-all {
+	width: 1px;
+	height: 1px;
+	border: none; /* Mobile Safari */
+	opacity: 0;
+	position: absolute;
+	right: 100%;
+	bottom: 100%;
+}
+
+.toggle-all + label {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 45px;
+	height: 65px;
+	font-size: 0;
+	position: absolute;
+	top: -65px;
+	left: -0;
+}
+
+.toggle-all + label:before {
+	content: '❯';
+	display: inline-block;
+	font-size: 22px;
+	color: #949494;
+	padding: 10px 27px 10px 27px;
+	-webkit-transform: rotate(90deg);
+	transform: rotate(90deg);
+}
+
+.toggle-all:checked + label:before {
+	color: #484848;
+}
+
+.todo-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.todo-list li {
+	position: relative;
+	font-size: 24px;
+	border-bottom: 1px solid #ededed;
+}
+
+.todo-list li:last-child {
+	border-bottom: none;
+}
+
+.todo-list li.editing {
+	border-bottom: none;
+	padding: 0;
+}
+
+.todo-list li.editing .edit {
+	display: block;
+	width: calc(100% - 43px);
+	padding: 12px 16px;
+	margin: 0 0 0 43px;
+}
+
+.todo-list li.editing .view {
+	display: none;
+}
+
+.todo-list li .toggle {
+	text-align: center;
+	width: 40px;
+	/* auto, since non-WebKit browsers doesn't support input styling */
+	height: auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin: auto 0;
+	border: none; /* Mobile Safari */
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+.todo-list li .toggle {
+	opacity: 0;
+}
+
+.todo-list li .toggle + label {
+	/*
+		Firefox requires `#` to be escaped - https://bugzilla.mozilla.org/show_bug.cgi?id=922433
+		IE and Edge requires *everything* to be escaped to render, so we do that instead of just the `#` - https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/7157459/
+	*/
+	background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23949494%22%20stroke-width%3D%223%22/%3E%3C/svg%3E');
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+
+.todo-list li .toggle:checked + label {
+	background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%2359A193%22%20stroke-width%3D%223%22%2F%3E%3Cpath%20fill%3D%22%233EA390%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.todo-list li label {
+	overflow-wrap: break-word;
+	padding: 15px 15px 15px 60px;
+	display: block;
+	line-height: 1.2;
+	transition: color 0.4s;
+	font-weight: 400;
+	color: #484848;
+}
+
+.todo-list li.completed label {
+	color: #949494;
+	text-decoration: line-through;
+}
+
+.todo-list li .destroy {
+	display: none;
+	position: absolute;
+	top: 0;
+	right: 10px;
+	bottom: 0;
+	width: 40px;
+	height: 40px;
+	margin: auto 0;
+	font-size: 30px;
+	color: #949494;
+	transition: color 0.2s ease-out;
+}
+
+.todo-list li .destroy:hover,
+.todo-list li .destroy:focus {
+	color: #C18585;
+}
+
+.todo-list li .destroy:after {
+	content: '×';
+	display: block;
+	height: 100%;
+	line-height: 1.1;
+}
+
+.todo-list li:hover .destroy {
+	display: block;
+}
+
+.todo-list li .edit {
+	display: none;
+}
+
+.todo-list li.editing:last-child {
+	margin-bottom: -1px;
+}
+
+.footer {
+	padding: 10px 15px;
+	height: 20px;
+	text-align: center;
+	font-size: 15px;
+	border-top: 1px solid #e6e6e6;
+}
+
+.footer:before {
+	content: '';
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: 50px;
+	overflow: hidden;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
+	            0 8px 0 -3px #f6f6f6,
+	            0 9px 1px -3px rgba(0, 0, 0, 0.2),
+	            0 16px 0 -6px #f6f6f6,
+	            0 17px 2px -6px rgba(0, 0, 0, 0.2);
+}
+
+.todo-count {
+	float: left;
+	text-align: left;
+}
+
+.todo-count strong {
+	font-weight: 300;
+}
+
+.filters {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	position: absolute;
+	right: 0;
+	left: 0;
+}
+
+.filters li {
+	display: inline;
+}
+
+.filters li a {
+	color: inherit;
+	margin: 3px;
+	padding: 3px 7px;
+	text-decoration: none;
+	border: 1px solid transparent;
+	border-radius: 3px;
+}
+
+.filters li a:hover {
+	border-color: #DB7676;
+}
+
+.filters li a.selected {
+	border-color: #CE4646;
+}
+
+.clear-completed,
+html .clear-completed:active {
+	float: right;
+	position: relative;
+	line-height: 19px;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.clear-completed:hover {
+	text-decoration: underline;
+}
+
+.info {
+	margin: 65px auto 0;
+	color: #4d4d4d;
+	font-size: 11px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	text-align: center;
+}
+
+.info p {
+	line-height: 1;
+}
+
+.info a {
+	color: inherit;
+	text-decoration: none;
+	font-weight: 400;
+}
+
+.info a:hover {
+	text-decoration: underline;
+}
+
+/*
+	Hack to remove background from Mobile Safari.
+	Can't use it globally since it destroys checkboxes in Firefox
+*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.toggle-all,
+	.todo-list li .toggle {
+		background: none;
+	}
+
+	.todo-list li .toggle {
+		height: 40px;
+	}
+}
+
+@media (max-width: 430px) {
+	.footer {
+		height: 50px;
+	}
+
+	.filters {
+		bottom: 10px;
+	}
+}
+
+:focus,
+.toggle:focus + label,
+.toggle-all:focus + label {
+	box-shadow: 0 0 2px 2px #CF7D7D;
+	outline: 0;
+}
 
 .input-wrapper {
   position: relative;
 }
 
-h1 {
-  /* font-size: 24px; */
-  /* color: #333; */
-  color: #b83f45;
-  font-size: 80px;
-  font-weight: 200;
+.toggle-all {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 100%;
+  opacity: 0;
+  z-index: 1;
 }
 
-.todo-app input[type="text"] {
-  display: block;
-  width: 100%;
-  font-size: 24px;
-  padding: 20px;
-  border: none;
-  border-bottom: 1px solid #eaeaea;
-  box-sizing: border-box;
-  outline: none;
+.toggle-all + label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #949494;
+  pointer-events: none;
+}
+
+.toggle-all:checked + label {
+  color: #484848;
 }
 
 .new-todo {
-  width: 100%;
-  font-size: 24px;     
-  font-weight: 200;    
-  font-family: inherit;
-  padding: 16px 200px 30px 130px;
-  border: none;
-  background: rgba(0, 0, 0, 0.003);
-  box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
-  display: block;
-  box-sizing: border-box;
-  color: #131212;     
-  /* padding-left: 50px; */
-  padding-left: 45px !important;
+  padding-left: 60px; 
 }
 
-input[type="text"]:focus,
-.new-todo:focus,
-.todo-list input.edit:focus {
-  border: 1px solid #b83f45;
-  outline: none;
-  /* box-shadow: 0 0 5px red; */
-  box-shadow: inset 0 -2px 1px rgba(0, 0, 0, .03);
-}
-
-/* input[type="text"]:focus {
-  border-color: #5b9bd5;
-  outline: none;
-} */
-
-section.main {
-  padding: 20px;
-  bottom: 0;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, .2), 0 8px 0 -3px #f6f6f6, 0 9px 1px -3px rgba(0, 0, 0, .2), 0 16px 0 -6px #f6f6f6, 0 17px 2px -6px rgba(0, 0, 0, .2);
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #eaeaea;
-}
-
-input[type="checkbox"] {
-  margin-right: 10px;
-}
-
-label {
-  flex-grow: 1;
-  font-size: 25px;
-}
-
-button.destroy {
-  background: none;
-  border: none;
-  color: #e74c3c;
-  font-size: 20px;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-button.destroy:hover {
- border-color: #ce4646;
-}
-
-footer {
-  padding: 15px;
-  text-align: center;
-  border-top: 1px solid #eaeaea;
-  margin-top: 20px;
-  font-size: 13px;
-  color: #999;
-}
-
-footer span {
-  font-size: 14px;
-  color: #777;
-}
-
-footer button {
-  background-color: #f2f5f7;
-  color: #0c0c0c;
-  border: none;
-  padding: 10px;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  margin-left: 10px;
-  margin-top: 10px;
-}
-
-footer button:hover {
-  /* background-color: #7e4245; */
-  border: 1px solid #b83f45;
-  border-radius: 4px;
-}
-
-/* .completed {
-  text-decoration: line-through;
-  color: #888;
-} */
-
-.todo-list li.completed label {
-  text-decoration: line-through;
-  color: #888;
-}
-
-footer button#clear-completed {
+li.editing .view {
   display: none;
 }
 
-button.active {
-  background-color: #95a5a6;
-  color: #fff;
-}
-
-button.active:hover {
-  background-color: #7f8c8d;
-}
-
-footer .filters {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-footer .filters button {
-  background-color: #fff;
-  border: none;
-  color: #3498db;
-  padding: 5px 15px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-footer .filters button:hover {
-  background-color: #f5f5f5;
-  border: 1px solid #b83f45;
-  border-radius: 4px;
-}
-
-.todo-list input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 30px;
-  height: 30px;
-  border: 2px solid #ccc;
-  border-radius: 50%;
-  cursor: pointer;
-  position: relative;
-  margin-right: 10px;
-  vertical-align: middle;
-  transition: background-color 0.2s, border-color 0.2s;
-}
-
-
-.todo-list input[type="checkbox"]:checked {
-  /* background-color: #09988dff; */
-  border-color: #09988dff;
-}
-
-.todo-list input[type="checkbox"]:checked::after {
-  content: '';
-  position: absolute;
-  top: 4px;
-  left: 7px;
-  width: 4px;
-  height: 14px;
-  border: solid #09988dff;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
-
-.editing label {
-  display: none;
-}
-
-.editing .edit {
+li.editing .edit {
   display: block;
 }
 
-.todo-list input.edit {
-  width: 90%;
-  font-size: 1rem;
-  padding: 5px;
-  margin-left: 10px;
+.edit {
+  display: none;
 }
-
-.toggle-all {
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-.toggle-all::before {
-  content: '';
-    position: absolute;
-    top: -9px;
-    left: 0px;
-    width: 12px;
-    height: 12px;
-    border-left: 2px solid #817f7f;
-    border-bottom: 2px solid #706f6f;
-    transform: rotate(-45deg);
-}
-
-.toggle-all:checked::before {
-  border-color: rgb(24, 24, 24);
-  /* transform: rotate(135deg); */
-}
-
-.todo-list li button.destroy {
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-.todo-list li:hover button.destroy {
-  opacity: 1;
-}
-
-.todo-list li button.destroy {
-  visibility: hidden;
-}
-
-.todo-list li:hover button.destroy {
-  visibility: visible;
-}
-
-
