@@ -153,49 +153,6 @@ function updateChildren(parentEl, newVChildren = [], oldDomChildren = []) {
   });
 }
 
-// function updateChildren(parentEl, newVChildren, oldDomChildren) {
-//   const newLength = newVChildren.length;
-//   const oldLength = oldDomChildren.length;
-
-//   let i = 0;
-
-//   while (i < newLength && i < oldLength) {
-//     const newVChild = newVChildren[i];
-//     const oldDomChild = oldDomChildren[i];
-
-//     if (typeof newVChild === 'string') {
-//       if (oldDomChild.nodeType === Node.TEXT_NODE) {
-//         if (oldDomChild.textContent !== newVChild) {
-//           oldDomChild.textContent = newVChild;
-//         }
-//       } else {
-//         const textNode = document.createTextNode(newVChild);
-//         parentEl.replaceChild(textNode, oldDomChild);
-//       }
-//     } else {
-//       render(newVChild, parentEl, oldDomChild);
-//     }
-
-//     i++;
-//   }
-
-//   while (i < oldLength) {
-//     parentEl.removeChild(oldDomChildren[i]);
-//     i++;
-//   }
-
-//   while (i < newLength) {
-//     const newVChild = newVChildren[i];
-//     if (typeof newVChild === 'string') {
-//       parentEl.appendChild(document.createTextNode(newVChild));
-//     } else {
-//       const el = createElementNode(newVChild);
-//       parentEl.appendChild(el);
-//     }
-//     i++;
-//   }
-// }
-
 function eventsKey() {
   const timePart = Date.now().toString(36);
   const randomPart = Math.random().toString(36).slice(2);

@@ -12,8 +12,8 @@ import { FooterInfo } from './FooterInfo.js';
     }
   }
 
-  const appRoot = document.createElement('div');
-  appRoot.id = 'app';
+  const appRoot = document.createElement('section');
+  appRoot.className = 'todoapp';
   document.body.appendChild(appRoot);
 
   // const state = createStateManager({ todos: [], filter: 'all' });
@@ -172,7 +172,7 @@ import { FooterInfo } from './FooterInfo.js';
     const remaining = todos.filter(t => !t.completed).length;
     const showClear = todos.some(t => t.completed);
 
-    return createElement('footer', { class: 'footer' }, [
+     return createElement('footer', { class: 'footer' }, [
       createElement('span', { class: 'todo-count' }, [
         createElement('strong', {}, [remaining.toString()]),
         ` item${remaining !== 1 ? 's' : ''} left`
@@ -211,16 +211,11 @@ import { FooterInfo } from './FooterInfo.js';
         ])
       ]),
 
-      showClear
-        ? createElement('button', {
-          class: 'clear-completed',
-          onclick: clearCompleted
-        }, ['Clear completed'])
-        : createElement('button', {
-          class: 'clear-completed',
-          disabled: true,
-          onclick: clearCompleted
-        }, ['Clear completed']),
+      createElement('button', {
+      class: 'clear-completed',
+      onclick: clearCompleted,
+      ...(showClear ? {} : { disabled: true })
+    }, ['Clear completed']),
     ].filter(Boolean));
   }
 
@@ -228,7 +223,7 @@ import { FooterInfo } from './FooterInfo.js';
     const todos = state.getState().todos;
     const allCompleted = todos.length > 0 && todos.every(todo => todo.completed);
 
-    return createElement('div', { class: 'todoapp' }, [
+    return createElement('section', { class: 'todoapp' }, [
       createElement('header', { class: 'header' }, [
         createElement('h1', {}, ['todos']),
         createElement('div', { class: 'input-wrapper' }, [
