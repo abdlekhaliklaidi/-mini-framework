@@ -395,7 +395,7 @@ html .clear-completed:active {
 	outline: 0;
 }
 
-.input-wrapper {
+.input-container {
 	position: relative;
 }
 

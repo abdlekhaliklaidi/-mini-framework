@@ -12,9 +12,9 @@ import { FooterInfo } from './FooterInfo.js';
     }
   }
 
-  const appRoot = document.createElement('section');
-  appRoot.className = 'todoapp';
-  document.body.appendChild(appRoot);
+  // const appRoot = document.createElement('section');
+  // appRoot.className = 'todoapp';
+  // document.body.appendChild(appRoot);
 
   // const state = createStateManager({ todos: [], filter: 'all' });
   const state = createStateManager({ todos: [], filter: 'all', editingId: null });
@@ -172,7 +172,7 @@ import { FooterInfo } from './FooterInfo.js';
     const remaining = todos.filter(t => !t.completed).length;
     const showClear = todos.some(t => t.completed);
 
-     return createElement('footer', { class: 'footer' }, [
+    return createElement('footer', { class: 'footer' }, [
       createElement('span', { class: 'todo-count' }, [
         createElement('strong', {}, [remaining.toString()]),
         ` item${remaining !== 1 ? 's' : ''} left`
@@ -212,10 +212,10 @@ import { FooterInfo } from './FooterInfo.js';
       ]),
 
       createElement('button', {
-      class: 'clear-completed',
-      onclick: clearCompleted,
-      ...(showClear ? {} : { disabled: true })
-    }, ['Clear completed']),
+        class: 'clear-completed',
+        onclick: clearCompleted,
+        ...(showClear ? {} : { disabled: true })
+      }, ['Clear completed']),
     ].filter(Boolean));
   }
 
@@ -226,7 +226,7 @@ import { FooterInfo } from './FooterInfo.js';
     return createElement('section', { class: 'todoapp' }, [
       createElement('header', { class: 'header' }, [
         createElement('h1', {}, ['todos']),
-        createElement('div', { class: 'input-wrapper' }, [
+        createElement('div', { class: 'input-container' }, [
           ...(todos.length > 0 ? [
             createElement('input', {
               type: 'checkbox',
@@ -270,8 +270,8 @@ import { FooterInfo } from './FooterInfo.js';
 
   function renderApp() {
     const newAppNode = AppComponent();
-    render(newAppNode, appRoot, currentAppNode);
-    currentAppNode = newAppNode._el; // Save DOM reference for next render
+    render(newAppNode, document.body, currentAppNode);
+    currentAppNode = newAppNode._el;
   }
 
 
