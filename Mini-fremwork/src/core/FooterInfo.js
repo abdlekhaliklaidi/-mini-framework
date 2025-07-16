@@ -6,13 +6,9 @@ export function FooterInfo() {
     { class: "info" },
     [
       createElement("p", {}, ["Created by the Mini Framework"]),
-      createElement(
-        "p",
-        {},
-        [
-          "Part of ",
-          createElement("a", { href: "http://todomvc.com" }, ["TodoMVC"])
-        ]
+      createElement("p",{},["Part of ",
+        createElement("a", { href: "http://todomvc.com" }, ["TodoMVC"])
+      ]
       )
     ]
   );

@@ -3,6 +3,7 @@ import { FooterInfo } from './FooterInfo.js';
 
 (function initApp() {
 
+
   if (!window.location.hash) {
   const path = window.location.pathname;
   const allowedPaths = ['/active', '/completed', '/'];
@@ -43,7 +44,6 @@ import { FooterInfo } from './FooterInfo.js';
          state.setState({ todos });
        }
 
-  // URL PATH
   function getPathFromFilter(filter) {
     return filter === 'all' ? '/' : `/${filter}`;
   }
@@ -281,7 +281,7 @@ import { FooterInfo } from './FooterInfo.js';
   function renderApp() {
     const newAppNode = AppComponent();
     render(newAppNode, appRoot, currentAppNode);
-    currentAppNode = newAppNode._el; // Save DOM reference for next render
+    currentAppNode = newAppNode._el; 
   }
 
 
@@ -290,19 +290,27 @@ import { FooterInfo } from './FooterInfo.js';
   state.subscribe('editingId', renderApp);
 
   router.addRoute('/', () => {
+    // console.log(window.location.hash)
+
     state.setState({ filter: 'all' });
   });
 
   router.addRoute('/active', () => {
+    // console.log(window.location.hash)
+
     state.setState({ filter: 'active' });
   });
 
   router.addRoute('/completed', () => {
+    // console.log(window.location.hash)
+    // console.log(window.location.hash.slice(1))
+
+
     state.setState({ filter: 'completed' });
   });
 
-  // Initial render
   router.navigate(window.location.hash.slice(1) || '/');
+
   render(FooterInfo(), document.body);
   router.initRoute();
 })();

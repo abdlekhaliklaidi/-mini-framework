@@ -5,7 +5,6 @@ const path = require('path');
 const PORT = 3001;
 
 const server = http.createServer((req, res) => {
-  console.log(`Requête reçue : ${req.method} ${req.url}`);
 
   let filePath = '.' + req.url;
   if (filePath === './') {
@@ -21,7 +20,7 @@ const server = http.createServer((req, res) => {
     '.txt': 'text/plain'
   };
 
-  const contentType = mimeTypes[extname] || 'application/octet-stream';
+  const contentType = mimeTypes[extname] ;
 
   fs.readFile(filePath, (err, content) => {
    if (err) {
@@ -52,5 +51,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Serveur lancé sur http://localhost:${PORT}`);
+  console.log(`Server is running on : http://localhost:${PORT}`);
 });
