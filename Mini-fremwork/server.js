@@ -1,6 +1,6 @@
 const http = require('http');
-const fs = require('fs');     
-const path = require('path'); 
+const fs = require('fs');
+const path = require('path');
 
 const PORT = 3001;
 
@@ -24,7 +24,7 @@ const server = http.createServer((req, res) => {
   const contentType = mimeTypes[extname] || 'application/octet-stream';
 
   fs.readFile(filePath, (err, content) => {
-   if (err) {
+    if (err) {
       if (err.code === 'ENOENT') {
         if (!path.extname(filePath)) {
           fs.readFile('./index.html', (err, content) => {

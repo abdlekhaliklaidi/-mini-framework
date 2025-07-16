@@ -197,7 +197,7 @@ function updateChildren(parentEl, newVChildren = [], oldDomChildren = []) {
 // }
 
 function eventsKey() {
-  const timePart   = Date.now().toString(36);
+  const timePart = Date.now().toString(36);
   const randomPart = Math.random().toString(36).slice(2);
   return `k_${timePart}_${randomPart}`;
 }
@@ -276,7 +276,7 @@ function createRouter() {
   }
 
   function navigate(path) {
-   if (window.location.hash.slice(1) !== path) {
+    if (window.location.hash.slice(1) !== path) {
       window.location.hash = path;
     }
     if (routes[path]) {
@@ -291,12 +291,12 @@ function createRouter() {
     }
 
     window.onhashchange = function () {
-    const currentPath = window.location.hash.slice(1) || '/';
-    if (routes[currentPath]) {
-      routes[currentPath]();
-    }
-  };
-}
+      const currentPath = window.location.hash.slice(1) || '/';
+      if (routes[currentPath]) {
+        routes[currentPath]();
+      }
+    };
+  }
 
   return { addRoute, navigate, initRoute };
 }
